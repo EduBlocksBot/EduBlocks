@@ -35,7 +35,6 @@ Get started with EduBlocks on your Raspberry Pi in these simple steps:
 ```bash
 curl -sSL get.edublocks.org | bash
 ```
-![alt tag](misc/3.png)
 4. The installer will now run for a few minutes. This depends on your internet speeds.
 ![alt tag](misc/4.png)
 5. You will now be able to see EduBlocks in the Raspberry Pi >> Programming menu. Click on the EduBlocks link to run the program.
